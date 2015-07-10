@@ -1,0 +1,79 @@
+package net.minecraft.server.v1_8_R3;
+
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.plugin.PluginManager;
+
+public class EntityMushroomCow
+  extends EntityCow
+{
+  public EntityMushroomCow(World world)
+  {
+    super(world);
+    setSize(0.9F, 1.3F);
+    this.bn = Blocks.MYCELIUM;
+  }
+  
+  public boolean a(EntityHuman entityhuman)
+  {
+    ItemStack itemstack = entityhuman.inventory.getItemInHand();
+    if ((itemstack != null) && (itemstack.getItem() == Items.BOWL) && (getAge() >= 0))
+    {
+      if (itemstack.count == 1)
+      {
+        entityhuman.inventory.setItem(entityhuman.inventory.itemInHandIndex, new ItemStack(Items.MUSHROOM_STEW));
+        return true;
+      }
+      if ((entityhuman.inventory.pickup(new ItemStack(Items.MUSHROOM_STEW))) && (!entityhuman.abilities.canInstantlyBuild))
+      {
+        entityhuman.inventory.splitStack(entityhuman.inventory.itemInHandIndex, 1);
+        return true;
+      }
+    }
+    if ((itemstack != null) && (itemstack.getItem() == Items.SHEARS) && (getAge() >= 0))
+    {
+      PlayerShearEntityEvent event = new PlayerShearEntityEvent((Player)entityhuman.getBukkitEntity(), getBukkitEntity());
+      this.world.getServer().getPluginManager().callEvent(event);
+      if (event.isCancelled()) {
+        return false;
+      }
+      die();
+      this.world.addParticle(EnumParticle.EXPLOSION_LARGE, this.locX, this.locY + this.length / 2.0F, this.locZ, 0.0D, 0.0D, 0.0D, new int[0]);
+      if (!this.world.isClientSide)
+      {
+        EntityCow entitycow = new EntityCow(this.world);
+        
+        entitycow.setPositionRotation(this.locX, this.locY, this.locZ, this.yaw, this.pitch);
+        entitycow.setHealth(getHealth());
+        entitycow.aI = this.aI;
+        if (hasCustomName()) {
+          entitycow.setCustomName(getCustomName());
+        }
+        this.world.addEntity(entitycow);
+        for (int i = 0; i < 5; i++) {
+          this.world.addEntity(new EntityItem(this.world, this.locX, this.locY + this.length, this.locZ, new ItemStack(Blocks.RED_MUSHROOM)));
+        }
+        itemstack.damage(1, entityhuman);
+        makeSound("mob.sheep.shear", 1.0F, 1.0F);
+      }
+      return true;
+    }
+    return super.a(entityhuman);
+  }
+  
+  public EntityMushroomCow c(EntityAgeable entityageable)
+  {
+    return new EntityMushroomCow(this.world);
+  }
+  
+  public EntityCow b(EntityAgeable entityageable)
+  {
+    return c(entityageable);
+  }
+  
+  public EntityAgeable createChild(EntityAgeable entityageable)
+  {
+    return c(entityageable);
+  }
+}

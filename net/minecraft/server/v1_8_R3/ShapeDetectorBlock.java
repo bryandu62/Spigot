@@ -1,0 +1,54 @@
+package net.minecraft.server.v1_8_R3;
+
+import com.google.common.base.Predicate;
+
+public class ShapeDetectorBlock
+{
+  private final World a;
+  private final BlockPosition b;
+  private final boolean c;
+  private IBlockData d;
+  private TileEntity e;
+  private boolean f;
+  
+  public ShapeDetectorBlock(World ☃, BlockPosition ☃, boolean ☃)
+  {
+    this.a = ☃;
+    this.b = ☃;
+    this.c = ☃;
+  }
+  
+  public IBlockData a()
+  {
+    if ((this.d == null) && ((this.c) || (this.a.isLoaded(this.b)))) {
+      this.d = this.a.getType(this.b);
+    }
+    return this.d;
+  }
+  
+  public TileEntity b()
+  {
+    if ((this.e == null) && (!this.f))
+    {
+      this.e = this.a.getTileEntity(this.b);
+      this.f = true;
+    }
+    return this.e;
+  }
+  
+  public BlockPosition d()
+  {
+    return this.b;
+  }
+  
+  public static Predicate<ShapeDetectorBlock> a(Predicate<IBlockData> ☃)
+  {
+    new Predicate()
+    {
+      public boolean a(ShapeDetectorBlock ☃)
+      {
+        return (☃ != null) && (this.a.apply(☃.a()));
+      }
+    };
+  }
+}

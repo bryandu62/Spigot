@@ -1,0 +1,52 @@
+package net.minecraft.server.v1_8_R3;
+
+public class GenLayerDeepOcean
+  extends GenLayer
+{
+  public GenLayerDeepOcean(long ☃, GenLayer ☃)
+  {
+    super(☃);
+    this.a = ☃;
+  }
+  
+  public int[] a(int ☃, int ☃, int ☃, int ☃)
+  {
+    int ☃ = ☃ - 1;
+    int ☃ = ☃ - 1;
+    int ☃ = ☃ + 2;
+    int ☃ = ☃ + 2;
+    int[] ☃ = this.a.a(☃, ☃, ☃, ☃);
+    
+    int[] ☃ = IntCache.a(☃ * ☃);
+    for (int ☃ = 0; ☃ < ☃; ☃++) {
+      for (int ☃ = 0; ☃ < ☃; ☃++)
+      {
+        int ☃ = ☃[(☃ + 1 + (☃ + 1 - 1) * (☃ + 2))];
+        int ☃ = ☃[(☃ + 1 + 1 + (☃ + 1) * (☃ + 2))];
+        int ☃ = ☃[(☃ + 1 - 1 + (☃ + 1) * (☃ + 2))];
+        int ☃ = ☃[(☃ + 1 + (☃ + 1 + 1) * (☃ + 2))];
+        
+        int ☃ = ☃[(☃ + 1 + (☃ + 1) * ☃)];
+        int ☃ = 0;
+        if (☃ == 0) {
+          ☃++;
+        }
+        if (☃ == 0) {
+          ☃++;
+        }
+        if (☃ == 0) {
+          ☃++;
+        }
+        if (☃ == 0) {
+          ☃++;
+        }
+        if ((☃ == 0) && (☃ > 3)) {
+          ☃[(☃ + ☃ * ☃)] = BiomeBase.DEEP_OCEAN.id;
+        } else {
+          ☃[(☃ + ☃ * ☃)] = ☃;
+        }
+      }
+    }
+    return ☃;
+  }
+}
